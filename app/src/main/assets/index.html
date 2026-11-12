@@ -32,7 +32,7 @@ h2{font-size:18px;margin:55px 0 10px;font-weight:900;letter-spacing:3px;color:#e
   <header class="head"><div class="avatar"></div><div class="title">MEXU FILE <span>👑</span></div></header>
   <button class="select" id="openPanel"><span>Free Fire</span><span class="arrow">▾</span></button>
   <h2>PERMISSIONS</h2>
-  <div class="permission"><span class="dot">●</span><div><strong>VPN</strong><small id="vpnStatus">Chưa bật VPN ✖</small></div></div>
+  <div class="permission"><span class="dot">●</span><div><strong>TRẠNG THÁI</strong><small id="vpnStatus">Không yêu cầu VPN ✔</small></div></div>
   <button class="launch" id="launch" aria-label="Mở bảng chức năng">▶</button>
 </div>
 <div class="device"><span>MÃ RIÊNG CỦA THIẾT BỊ</span><b data-device-code>ĐANG TẠO...</b></div>
@@ -47,14 +47,14 @@ h2{font-size:18px;margin:55px 0 10px;font-weight:900;letter-spacing:3px;color:#e
       </nav>
       <main class="content">
         <section id="aim">
-          <div class="lock-note" id="lockNote">🔒 Hãy bật VPN trong ZEP VPN trước khi sử dụng chức năng.</div>
+          <div class="lock-note" id="lockNote">Không cần kết nối VPN để sử dụng.</div>
           <div class="row"><div class="name"><i>👑</i>Aimlock</div><button class="toggle" role="switch" aria-checked="false" aria-label="Aimlock" data-name="Aimlock"></button></div>
           <div class="row"><div class="name"><i>🎯</i>Aim Head</div><button class="toggle" role="switch" aria-checked="false" aria-label="Aim Head" data-name="Aim Head"></button></div>
           <div class="row"><div class="name"><i>👤</i>Aim Body</div><button class="toggle" role="switch" aria-checked="false" aria-label="Aim Body" data-name="Aim Body"></button></div>
           <div class="row"><div class="name"><i>🎯</i>Aim Neck</div><button class="toggle" role="switch" aria-checked="false" aria-label="Aim Neck" data-name="Aim Neck"></button></div>
         </section>
         <section id="fire" hidden>
-          <div class="lock-note" id="fireLockNote">🔒 Hãy bật VPN trong ZEP VPN trước khi sử dụng chức năng.</div>
+          <div class="lock-note" id="fireLockNote">Không cần kết nối VPN để sử dụng.</div>
           <div class="row"><div class="name"><i>🧱🔥</i>Tường lửa</div><button class="toggle" role="switch" aria-checked="false" aria-label="Tường lửa" data-name="Tường lửa"></button></div>
         </section>
         <section id="info" hidden class="info">
@@ -96,25 +96,23 @@ document.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{
  pages.forEach(id=>document.getElementById(id).hidden=id!==tab.dataset.page);
 });
 let timer;
-const VPN_KEY='mexu_shared_vpn_status_v1';
-function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>t.classList.remove('show'),1800)}
-function vpnIsOn(){return localStorage.getItem(VPN_KEY)==='on'}
-function refreshVpn(){
- const on=vpnIsOn();
- document.getElementById('vpnStatus').textContent=on?'Đã bật VPN ✔':'Chưa bật VPN ✖';
- document.getElementById('lockNote').hidden=on;
- document.getElementById('fireLockNote').hidden=on;
- document.querySelectorAll('.toggle').forEach(b=>b.disabled=!on);
+function toast(s){
+ const t=document.getElementById("toast");
+ t.textContent=s;
+ t.classList.add("show");
+ clearTimeout(timer);
+ timer=setTimeout(()=>t.classList.remove("show"),1800);
 }
-window.addEventListener('storage',e=>{if(e.key===VPN_KEY)refreshVpn()});
-window.addEventListener('focus',refreshVpn);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshVpn()});
-document.querySelectorAll('.toggle').forEach(btn=>btn.onclick=()=>{
- if(!vpnIsOn()){toast('Hãy bật VPN trong ZEP VPN trước');refreshVpn();return}
- const on=btn.getAttribute('aria-checked')!=='true';
- document.querySelectorAll('.toggle').forEach(b=>b.setAttribute('aria-checked','false'));
- if(on){btn.setAttribute('aria-checked','true');toast('Đã bật '+btn.dataset.name)}
- else toast('Đã tắt '+btn.dataset.name);
+document.getElementById("vpnStatus").textContent="Không yêu cầu VPN ✔";
+document.getElementById("lockNote").hidden=true;
+document.getElementById("fireLockNote").hidden=true;
+document.querySelectorAll(".toggle").forEach(btn=>{
+ btn.disabled=false;
+ btn.onclick=()=>{
+  const on=btn.getAttribute("aria-checked")!=="true";
+  document.querySelectorAll(".toggle").forEach(b=>b.setAttribute("aria-checked","false"));
+  if(on){btn.setAttribute("aria-checked","true");toast("Đã bật "+btn.dataset.name)}
+  else{toast("Đã tắt "+btn.dataset.name)}
+ };
 });
-refreshVpn();
 </script></body></html>
